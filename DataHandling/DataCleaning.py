@@ -89,11 +89,13 @@ print('Categorical:')
 print(df.dtypes)
 print()
 
-#-> no duplicates found
-
 #SPEICHERN
 output_path = r"../Data_Cleaned.csv"
 df_cleaned.to_csv(output_path, index=False)
 print(f"Daten wurden erfolgreich gespeichert unter: {output_path}")
 
-#-----------------------------------------------------
+output_path = r"../Data_Cleaned.xlsx"
+(df_cleaned.to_excel(output_path, index=False))
+print(f"Daten wurden erfolgreich gespeichert unter: {output_path}")
+
+

@@ -16,3 +16,17 @@ df = pd.read_csv(file_path, sep=",", quotechar='"', header=0)
 print('Complete DataSet:')
 print(df.head())
 
+#Categories
+categorical_columns = ["Country", "Region", "Economy_status_Developed", "Economy_status_Developing"]
+
+for col in categorical_columns:
+    df[col] = df[col].astype("category")
+
+print('Categorical:')
+print(df.dtypes)
+print()
+
+#-----------------------------------
+#Drop: Country, Region, Life_Expectancy, (Developed/Developing) ?
+#Target: Region
+

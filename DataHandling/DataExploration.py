@@ -16,6 +16,35 @@ df = pd.read_csv(file_path, sep=",", quotechar='"', header=0)
 print('Complete DataSet:')
 print(df.head())
 
+#Ideas:
+# - Mit Plots begründen was wir dann droppen
+
+#Categories
+categorical_columns = ["Country", "Region", "Economy_status_Developed", "Economy_status_Developing"]
+
+for col in categorical_columns:
+    df[col] = df[col].astype("category")
+
+print('Categorical:')
+print(df.dtypes)
+print()
+
+#-----------------------------------
+
+#Random Plots
+sns.pairplot(df[["Life_expectancy", "GDP_per_capita", "Schooling", "Adult_mortality", "Alcohol_consumption"]])
+plt.suptitle("Pairplot ausgewählter Features", y=1.02)
+plt.show()
+
+sns.jointplot(data=df, x="GDP_per_capita", y="Life_expectancy", kind="kde", fill=True)
+plt.suptitle("KDE Plot: GDP vs Life Expectancy", y=1.05)
+plt.show()
+
+sns.jointplot(data=df, x="Schooling", y="Life_expectancy", kind="hist")
+plt.suptitle("Histogramm Plot: Schooling vs Life Expectancy", y=1.05)
+plt.show()
+
+#-----------------------------------
 
 #Outliers & Plots
 def plot_life_expectancy_outliers(df):
@@ -48,6 +77,7 @@ plt.grid(True)
 plt.show()
 
 #-----------------------------------------------------
+
 #Outliers (declining Life Expectancy)
 df_sorted = df.sort_values(by=["Country", "Year"])
 
@@ -71,4 +101,5 @@ decline_countries = life_change[life_change < 0]
 print("\nLänder, bei denen die Lebenserwartung insgesamt gesunken ist:")
 print(decline_countries)
 
+#--------------------------------
 
