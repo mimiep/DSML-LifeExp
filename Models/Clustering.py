@@ -27,5 +27,7 @@ print(df.dtypes)
 print()
 
 #-----------------------------------
-#Drop: Country, Region, Life_Expectancy, (Developed/Developing) ?
+#Drop: Country, Region, Life_Expectancy,(Year), (Developed/Developing) ?
 #Target: Region
+
+#SIMON
