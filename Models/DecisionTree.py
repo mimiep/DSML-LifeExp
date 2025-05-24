@@ -1,7 +1,8 @@
 #Imports
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split, StratifiedKFold, cross_val_score, ShuffleSplit, cross_validate
+from sklearn.model_selection import train_test_split, StratifiedKFold, cross_val_score, ShuffleSplit, cross_validate, \
+    GridSearchCV
 from sklearn.preprocessing import StandardScaler
 from sklearn.tree import DecisionTreeClassifier, export_text
 from sklearn.metrics import classification_report, accuracy_score, balanced_accuracy_score, confusion_matrix, \
@@ -274,6 +275,46 @@ importances = pd.Series(clf.feature_importances_, index=X.columns)
 print("\nTop 10 Feature Importances:")
 print(importances.sort_values(ascending=False).head(10))
 
+print("----------------------------------------------------- Try to improve model -------------------------------------------------------")
+# 1) Basis-Estimator
+base_clf = DecisionTreeClassifier(random_state=42)
+
+# 2) Parameter-Grid definieren
+param_grid = {
+    'max_depth': [None, 5, 10, 20],
+    'min_samples_split': [2, 5, 10],
+    'min_samples_leaf': [1, 2, 5],
+    'max_features': [None, 'sqrt', 'log2'],
+    'ccp_alpha': [0.0, 0.001, 0.01, 0.1]
+}
+
+# 3) Cross-Validation-Strategie
+cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+
+# 4) Grid-Search aufsetzen
+grid_search = GridSearchCV(
+    estimator=base_clf,
+    param_grid=param_grid,
+    scoring='balanced_accuracy',   # oder 'accuracy', 'f1_macro', ...
+    n_jobs=-1,
+    cv=cv,
+    verbose=1
+)
+
+# 5) Suche auf dem Trainingsset ausführen
+grid_search.fit(X_train, y_train)
+
+# 6) Beste Parameter & Performance
+print("Bestes Parameter-Set:", grid_search.best_params_)
+print("Best Score (Balanced Accuracy):", grid_search.best_score_)
+
+# 7) Finalmodell evaluieren
+best_clf = grid_search.best_estimator_
+y_pred = best_clf.predict(X_test)
+print("Test Balanced Accuracy:", balanced_accuracy_score(y_test, y_pred))
+print(classification_report(y_test, y_pred))
+
+print("---------------------------------------------------- show confusions between regions and countries ----------------------------------")
 cm = confusion_matrix(y_test, y_pred, labels=clf.classes_)
 
 #plot confision matrix -> check which regions are confused
