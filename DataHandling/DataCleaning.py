@@ -1,47 +1,50 @@
-#---------------Data Cleaning-------------------
+# ============================================================
+#                     DATA CLEANING
+# ============================================================
 
-#Imports
+# Goal: Prepare the dataset for analysis by handling missing values, duplicates, and data types.
+
+# ------------------ Imports ------------------
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-#For Print
+#Adjust Print Options
 pd.set_option('display.max_rows', None)
 pd.set_option('display.max_columns', None)
 pd.set_option('display.width', None)
 pd.set_option('display.max_colwidth', None)
 
-#-----------------------------------------------------
+# ------------------ Load Dataset ------------------
 
-#Read File
-file_path = r"../Data.csv"
+file_path = r"Data.csv"
 df = pd.read_csv(file_path, sep=",", quotechar='"', header=0)
 print('Complete DataSet:')
 print(df.head())
 print()
 
-#-> no skipfooter or skiprow necessarry
+#Conclusion:
+#   -> no skipfooter or skiprow necessarry
 
-#-----------------------------------------------------
+# ------------------ Basic Dataset Info ------------------
 
 #Print Datatypes
 print('Datatypes:')
 print(df.dtypes)
 print()
 
-#-----------------------------------------------------
-
 #Print Shape
 print('Shape:')
 print(df.shape)
 print()
 
-#-----------------------------------------------------
+# ------------------ Handle Missing Values ------------------
 
-#Missing Values
+#Define indicators for missing data
 missing_values = ["-999", "NaN", "", "nan", "NULL", "null", "na", "missing"]
 
+#Columns where missing values are likely
 critical_columns = [
     "Country", "Region", "Year", "Infant_deaths", "Under_five_deaths",
     "Adult_mortality", "Hepatitis_B", "Measles", "BMI", "Polio", "Diphtheria",
@@ -50,34 +53,40 @@ critical_columns = [
     "Schooling", "Life_expectancy"
 ]
 
-print("Before:")
+print("Missing Values BEFORE cleaning:")
 print(df.isna().sum())
 print()
 
+# Replace missing indicators with np.nan
 df.replace(missing_values, np.nan, inplace=True)
 
+#Replace zeros in critical numerical columns with np.nan
 for col in critical_columns:
     if df[col].dtype != object:
         df[col] = df[col].replace(0, np.nan)
 
-print("After:")
+print("Missing Values AFTER cleaning:")
 print(df.isna().sum())
 print()
 
-#-> there were and are no missing values in the dataset
+#Conclusion:
+#   -All known missing value placeholders have been replaced.
+#   -> there were and are no missing values in the dataset
 
-#-----------------------------------------------------
+# ------------------ Check for Duplicates ------------------
 
 #Find duplicates
 print("Duplicates:")
-duplicates = df[df.duplicated(keep=False)]  # zeigt alle Duplikate, nicht nur die zweiten Vorkommen
+duplicates = df[df.duplicated(keep=False)]   #shows duplicates
 print(duplicates)
 
+# Drop any duplicates just in case
 df_cleaned = df.drop_duplicates()
 
-#-> no duplicates found
+#Conclusion:
+#   -> No duplicate rows found
 
-#-----------------------------------------------------
+# ------------------ Convert to Categorical ------------------
 
 #Categories
 categorical_columns = ["Country", "Region", "Economy_status_Developed", "Economy_status_Developing"]
@@ -89,13 +98,24 @@ print('Categorical:')
 print(df.dtypes)
 print()
 
-#SPEICHERN
-output_path = r"../Data_Cleaned.csv"
+#Conclusion:
+#   Converting relevant columns to 'category'
+#   -> Improves Memory Efficiency and simplifies later analysis
+
+# ------------------ Save Cleaned Dataset ------------------
+# Save as CSV
+output_path = r"Data_Cleaned.csv"
 df_cleaned.to_csv(output_path, index=False)
 print(f"Daten wurden erfolgreich gespeichert unter: {output_path}")
 
-output_path = r"../Data_Cleaned.xlsx"
+# Save as Excel
+output_path = r"Data_Cleaned.xlsx"
 (df_cleaned.to_excel(output_path, index=False))
 print(f"Daten wurden erfolgreich gespeichert unter: {output_path}")
 
-
+# ------------------ Final Conclusion ------------------
+# The dataset has been successfully cleaned:
+#   - Missing values replaced
+#   - No duplicates
+#   - Categorical data converted
+#   - Cleaned dataset saved in both CSV and Excel formats
