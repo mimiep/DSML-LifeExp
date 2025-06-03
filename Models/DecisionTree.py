@@ -103,12 +103,12 @@ print(f"Balanced Accuracy (mean ± std): "
 
 print("\n------------------------------------------------ 4. Principal Component Analysis ------------------------------------------------")
 # 1) data scaling important for PCA
-scaler     = StandardScaler()
-X_scaled   = scaler.fit_transform(X)
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
 
 # 2) PCA-Instanz erzeugen und fitten
-pca_model  = PCA()
-pca_model  = pca_model.fit(X_scaled)
+pca_model = PCA()
+pca_model = pca_model.fit(X_scaled)
 
 # 4) Scree-Plot
 cum_var = np.cumsum(pca_model.explained_variance_ratio_)
@@ -125,8 +125,6 @@ plt.show()
 
 n_components_list = [9, 10, 11, 12]
 # - Ganzzahl = fixe Zahl der Komponenten
-
-cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
 
 # CV-Setup
 cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
@@ -245,6 +243,42 @@ print(importances.sort_values(ascending=False).head(10))
 print("\n------------------------------------ Drop schooling to only model health related measures ------------------------------------------------")
 
 X = X.drop(columns=['Schooling'])
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y,
+    test_size=0.2,
+    random_state=42,
+    stratify=y,
+    shuffle=True #without shuffle, problems accour since data is in a specific order!
+)
+
+clf = DecisionTreeClassifier(random_state=42)
+
+clf.fit(X_train, y_train)
+y_pred = clf.predict(X_test)
+print("\nHoldout-Testset Accuracy:")
+print(round(accuracy_score(y_test, y_pred), 3))
+print("\nHoldout-Testset Balanced Accuracy:")
+print(round(balanced_accuracy_score(y_test, y_pred), 3))
+print("\nHoldout-Testset Classification report:")
+print(classification_report(y_test, y_pred))
+
+cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+cv_scores = cross_val_score(clf, X, y, cv=cv, scoring='accuracy')
+print(f"5-Fold CV Accuracy: {cv_scores.mean():.3f} ± {cv_scores.std():.3f}")
+bacc_scores = cross_val_score(clf, X, y, cv=cv, scoring='balanced_accuracy')
+print(f"5-Fold CV Balanced Accuracy: {bacc_scores.mean():.3f} ± {bacc_scores.std():.3f}")
+
+importances = pd.Series(clf.feature_importances_, index=X.columns)
+print("\nTop 10 Feature Importances:")
+print(importances.sort_values(ascending=False).head(10))
+
+print("\n------------------------------------ Drops for comparison with kNN ------------------------------------------------")
+
+X = df.drop(columns=[
+    "Country", "Region", "Life_expectancy", "Year",
+    "Economy_status_Developed", "Economy_status_Developing"
+])
 
 X_train, X_test, y_train, y_test = train_test_split(
     X, y,
