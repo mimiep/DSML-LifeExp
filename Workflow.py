@@ -149,5 +149,23 @@ Conlusion:
 
 '''
 
+'''
+========================================
+                Models
+========================================
+
+- Discuss model deployment from a technical point of view
+
+- Try to interpret your model from the domain expert view. Is the model good
+enough? What are possible consequences of deploying the model? What needs to
+be monitored after deployment?
+
+- Discuss model deployment from a societal point of view. What does it mean for
+society if such a model would be deployed at large scale? Are there any dangers?
+
+
+
+
+'''
 
 

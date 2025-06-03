@@ -113,9 +113,27 @@ output_path = r"Data_Cleaned.xlsx"
 (df_cleaned.to_excel(output_path, index=False))
 print(f"Daten wurden erfolgreich gespeichert unter: {output_path}")
 
+# ------------------ Class Distribution: Region ------------------
+
+print("Class Distribution of the Target Variable 'Region'")
+
+plt.figure(figsize=(10, 6))
+sns.countplot(data=df, x="Region", order=df["Region"].value_counts().index, palette="viridis")
+plt.title("Distribution of Countries by Region", fontsize=14)
+plt.xlabel("Region", fontsize=12)
+plt.ylabel("Number of Records", fontsize=12)
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+region_counts = df["Region"].value_counts()
+print("\nRegion Distribution (Number of Rows):")
+print(region_counts)
+
 # ------------------ Final Conclusion ------------------
 # The dataset has been successfully cleaned:
 #   - Missing values replaced
 #   - No duplicates
 #   - Categorical data converted
 #   - Cleaned dataset saved in both CSV and Excel formats
+#   - A lot of records of Africa, and few of North America

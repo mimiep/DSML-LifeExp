@@ -34,6 +34,9 @@ print('Categorical:')
 print(df.dtypes)
 print()
 
+#Sort the values
+df = df.sort_values(by=["Country", "Year"])
+
 # ===========================================================
 #                    EXPLORATION
 # ===========================================================
@@ -53,34 +56,35 @@ plt.show()
 #       -> Adult Mortality & HIV Incidents
 
 # ------------------ Life Expectancy Over Time ------------------
+
 first = df.groupby("Country").first()
 last = df.groupby("Country").last()
-life_change = last["Life_expectancy"] - first["Life_expectancy"]
-decline_countries = life_change[life_change < 0].sort_values()
 
-print("Countries where life expectancy decreased (2000–2015):")
-for country, change in decline_countries.items():
-    print(f"{country}: {change:.2f} years")
+life_change = last["Life_expectancy"] - first["Life_expectancy"]
+
+growth_countries = life_change[life_change > 0].sort_values(ascending=False)
+
+print("Countries where life expectancy increased the most (2000–2015):")
+for country, change in growth_countries.head(10).items():
+    print(f"{country}: +{change:.2f} years")
 
 # Top 5
-top_decline = decline_countries.head(5)
+top_growth = growth_countries.head(5)
 
-# Plot
 plt.figure(figsize=(10,6))
-for country in top_decline.index:
+for country in top_growth.index:
     country_df = df[df["Country"] == country]
     plt.plot(
         country_df["Year"],
         country_df["Life_expectancy"],
-        label=f"{country} ({top_decline[country]:.2f} yrs)"
+        label=f"{country} (+{top_growth[country]:.2f} yrs)"
     )
 
-plt.title("Countries with Largest Decrease in Life Expectancy (2000–2015)")
+plt.title("Countries with Largest Increase in Life Expectancy (2000–2015)")
 plt.xlabel("Year")
 plt.ylabel("Life Expectancy")
 plt.legend()
 plt.grid(True)
-plt.gca().invert_yaxis()
 plt.show()
 
 #Finding:
@@ -262,6 +266,7 @@ plt.show()
 sns.jointplot(data=df, x="Schooling", y="Life_expectancy", kind="hist")
 plt.suptitle("Histogram: Schooling vs Life Expectancy", y=1.05)
 plt.show()
+
 
 
 # ============================================================
