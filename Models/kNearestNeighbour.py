@@ -195,7 +195,7 @@ compare_df = pd.concat([test_distribution.value_counts().sort_index(),
 print("\nVerteilung der Klassen im Testset vs. Vorhersage:")
 print(compare_df)
 
-compare_df.plot(kind='bar', title="Actual vs. predicted Klassenverteilung")
+compare_df.plot(kind='bar', title="Actual vs. predicted Class distribution")
 plt.xlabel("Region")
 plt.ylabel("Anzahl")
 plt.tight_layout()
