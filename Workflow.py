@@ -136,7 +136,19 @@ Conlusion:
 ---------------kNearestNeighbour---------------
 
 Explain: 
+We used a K-Nearest Neighbors (KNN) classifier to predict the region of a country based on several health and nutrition indicators.
+KNN is a simple algorithm that classifies a sample based on the majority class of its 'k' closest neighbors in the feature space.
+We used 5-fold stratified cross-validation to select the best value of 'k'. This method splits the data into 5 parts while keeping the class distribution consistent in each fold.
+Based on the cross-validation plot, we chose k = 5. This value provided a good balance between model complexity and accuracy.
 
+Model Evaluation:
+The mean cross-validation accuracy was about 89.8%, with a low standard deviation, showing consistent performance across folds.
+On the test set, we achieved a final accuracy of 90%.
+
+The classification report shows strong performance across most regions:
+- Very high recall for regions like Africa (98.77%), European Union (96.51%) and Middle East (100%).
+- Slightly lower recall for South America (71.05%) and Rest of Europe (79.17%), possibly due to overlapping features between countries like Austria and Switzerland.
+- Precision and F1-scores are also high, indicating that the model performs well in both identifying and correctly labeling the regions.
 
 '''
 
@@ -144,8 +156,9 @@ exec(open("Models/kNearestNeighbour.py").read())
 
 '''
 Conlusion:
-
-
+KNN is a strong baseline model for this classification task, reaching 90% accuracy with relatively simple logic.
+It performs particularly well for distinct regions with strong feature signals, but struggles more when regions are similar in their indicators.
+Overall, KNN offers good interpretability and decent performance, making it a useful method to start exploring the regional classification problem.
 
 '''
 
@@ -162,8 +175,6 @@ be monitored after deployment?
 
 - Discuss model deployment from a societal point of view. What does it mean for
 society if such a model would be deployed at large scale? Are there any dangers?
-
-
 
 
 '''
