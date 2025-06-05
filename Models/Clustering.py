@@ -24,7 +24,7 @@ pd.set_option('display.width', None)
 pd.set_option('display.max_colwidth', None)
 
 #Read File
-file_path = "..\Data_Cleaned.csv"
+file_path =  r"Data_Cleaned.csv"
 df = pd.read_csv(file_path, sep=",", quotechar='"', header=0)
 print('Complete DataSet:')
 print(df.head())

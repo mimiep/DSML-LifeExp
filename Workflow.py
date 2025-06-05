@@ -101,7 +101,23 @@ Conclusion:
 ---------------Clustering---------------
 
 Explain: 
+Clustering was used to explore hidden structures and similarities between countries, independent of their official regional labels.
+The main goal shifted from "predicting regions" to "understanding latent groupings" based on health, demographic, and economic indicators.
 
+We tested:
+k-Means with the number of clusters equal to the number of known regions
+Agglomerative hierarchical clustering
+Explorative clustering with k = 5 (based on silhouette score and elbow method)
+
+Evaluation Metrics:
+Adjusted Rand Index (ARI): measured alignment with true region labels
+Silhouette Score: assessed internal cluster cohesion
+Confusion matrices and cluster profiles: used for interpretation
+
+Findings:
+Region-based clustering produced mixed results (e.g., Africa and EU were well grouped, Oceania poorly)
+Hierarchical clustering performed similarly, with no clear improvement
+Clustering with k = 5 revealed clearer and more interpretable clusters with distinct feature profiles
 
 '''
 
@@ -109,8 +125,15 @@ exec(open("Models/Clustering.py").read())
 
 '''
 Conlusion:
+Clustering was not well-suited for directly predicting region labels, but it provided valuable insights into shared health and development patterns across countries.
+Using k = 5, we identified interpretable and diverse clusters, such as:
+A cluster with high life expectancy, high schooling, high vaccination coverage, and low infant mortality
+A cluster with very high adult mortality, high HIV incidence, and low life expectancy
+A cluster with high BMI and education, but low alcohol use and malnutrition
+A cluster marked by low schooling, high infant deaths, and very large population sizes
+And one with high malnutrition indicators and low HIV and BMI levels
 
-
+These clusters illustrate that countries across different geographic regions can share similar health and development profiles.
 
 '''
 
