@@ -119,7 +119,13 @@ Conlusion:
 ---------------Decision Tree---------------
 
 Explain: 
-
+A classification tree was used to predict the region of a country based on several health and nutrition indicators.
+Several techniques were used to find an optimal decision tree:
+    Comparison of different validation techniques
+    PCA
+    Feature selection
+    Hyperparameter tuning
+Finally, false classification results were shown with the help of a confusion matrix
 
 '''
 
@@ -128,8 +134,19 @@ exec(open("Models/DecisionTree.py").read())
 '''
 Conlusion:
 
+It was possible to classify the region with an accuracy of well above 90%
+    The model containing most of the original features shows a balanced accuracy of 95%
+    Even after dropping important features, the balanced accuracy was 93% (only using health related features)
+After PCA, the performance got worse (even with a large number of componentes), therefore it was not used further
+Hyperparameter tuning showed that the default parameters were already the best choice 
 
+Comparison with kNN: for health related features only, the accuracy was higher with 95% (compared to 90%)
+    However, when using more features, the difference in accuracy was very little which shows that the performance of a model is highly dependent on the data
 
+The classification report shows strong performance across most regions:
+- recall for Asia is 90%
+- recalls above 95% for all other regions
+- Precision and F1-scores are also high, indicating that the model performs well in both identifying and correctly labeling the regions.
 '''
 # %%
 '''

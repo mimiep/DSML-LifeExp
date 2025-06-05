@@ -36,7 +36,7 @@ pd.set_option('display.max_colwidth', None)
 # --------------------------------------------------
 # The dataset was preprocessed and cleaned in a separate script (data_cleaning.py).
 # We now load the cleaned version for further modeling steps.
-file_path = r"../Data_Cleaned.csv"
+file_path = r"Data_Cleaned.csv"
 df = pd.read_csv(file_path, sep=",", quotechar='"', header=0)
 
 # --------------------------------------------------
