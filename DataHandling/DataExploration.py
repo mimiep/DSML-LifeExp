@@ -42,6 +42,8 @@ df = df.sort_values(by=["Country", "Year"])
 # ===========================================================
 
 # ------------------ Correlation Matrix ------------------
+# Purpose: Identify relationships between features
+
 plt.figure(figsize=(14,10))
 corr = df.select_dtypes(include=[np.number]).corr()
 sns.heatmap(corr, annot=True, cmap="coolwarm", fmt=".2f", square=True)
@@ -56,7 +58,9 @@ plt.show()
 #       -> Adult Mortality & HIV Incidents
 
 # ------------------ Life Expectancy Over Time ------------------
+# Purpose: Identify countries with greatest improvement in Life Expectancy
 
+# Compare first and last available life expectancy for each country
 first = df.groupby("Country").first()
 last = df.groupby("Country").last()
 
@@ -64,11 +68,12 @@ life_change = last["Life_expectancy"] - first["Life_expectancy"]
 
 growth_countries = life_change[life_change > 0].sort_values(ascending=False)
 
+# Print Top 10
 print("Countries where life expectancy increased the most (2000–2015):")
 for country, change in growth_countries.head(10).items():
     print(f"{country}: +{change:.2f} years")
 
-# Top 5
+# Plot top 5 with biggest improvement
 top_growth = growth_countries.head(5)
 
 plt.figure(figsize=(10,6))
@@ -88,10 +93,11 @@ plt.grid(True)
 plt.show()
 
 #Finding:
-#   - These countries are exceptions — most others showed increase in LE.
+#   - This line plot shows the top 5 countries with the greatest improvement
 
 
-#-----------------Outliers ------------------
+# ------------------ Life Expectancy Decline ------------------
+#Purpose: Identify countries with decreased Life Expectancy
 
 #2000 vs 2015
 first = df.groupby("Country").first()
@@ -103,7 +109,12 @@ decline_countries = life_change[life_change < 0]
 print("\nCountries with decreased Life Expectancy:")
 print(decline_countries)
 
+#Finding:
+#   - Only a few countries experienced a decline in life expectancy.
+#   - This may reflect crises like war, pandemics, or systemic health issues.
+
 # ------------------ Regional Trends ------------------
+# Purpose: Examine average LE changes by region
 
 region_year = df.groupby(["Region", "Year"])["Life_expectancy"].mean().reset_index()
 
@@ -114,8 +125,11 @@ plt.show()
 
 #Finding:
 #   - Regional differences are visible — some regions consistently lag behind others.
+#   - Africa and South-East Asia lag behind, though they show upward trends.
+#   -> this can show the difference between 2000- 2015 when predicting the region
 
 # ------------------ Boxplots for Numerical Features ------------------
+# Purpose: Detect outliers and value distributions
 
 numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
 for col in numeric_cols:
@@ -127,8 +141,10 @@ for col in numeric_cols:
 
 # Finding:
 #   - Outliers become visible
+#   - HIV incidence and GDP have extreme outliers (but they are still very important)
 
 # ------------------ Life Expectancy vs GDP ------------------
+# Purpose: Look at correlation between Life Expectancy and GDP
 
 plt.figure(figsize=(10,6))
 sns.scatterplot(data=df, x="GDP_per_capita", y="Life_expectancy", hue="Region", alpha=0.7)
@@ -139,8 +155,10 @@ plt.show()
 
 # Finding:
 #   - higher GDP per capita correlates with higher life expectancy
+#   - Richer countries tend to have longer life expectancy.
 
 # ------------------ Life Expectancy vs HIV ------------------
+# Purpose: Look at correlation between Life Expectancy and HIV
 
 plt.figure(figsize=(10,6))
 sns.scatterplot(data=df, x="Incidents_HIV", y="Life_expectancy", hue="Region", alpha=0.6)
@@ -151,10 +169,13 @@ plt.grid(True)
 plt.show()
 
 # Finding:
+#   - A negative relationship exists.
 #   - High HIV incidence tends to correlates with lower life expectancy
+#   -> relevant for Africa
 
-#-----------------------------------
-#Schooling by Region
+# ------------------ Schooling by Region ------------------
+# Purpose: Compare education levels across regions
+
 plt.figure(figsize=(12,6))
 sns.boxplot(data=df, x="Region", y="Schooling")
 plt.title("Years of Schooling by Region")
@@ -164,8 +185,11 @@ plt.show()
 
 # Finding:
 #   - Large disparities between regions when it comes to school years
+#   -> may explain life expectancy differences.
 
 # ------------------ Correlation Over Time ------------------
+# Purpose: See if LifeExpectancy and GDP is stable
+
 years = sorted(df["Year"].unique())
 corrs = []
 
@@ -182,6 +206,7 @@ plt.show()
 
 # Finding:
 #   - GDP is a stable predictor of life expectancy
+#   - The correlation remains consistently strong
 
 # ------------------ Top & Bottom Countries (2015) ------------------
 
@@ -200,6 +225,7 @@ plt.show()
 #   - Conformation: top countries are mostly developed, bottom are not
 
 # ------------------ Clustering ------------------
+# Purpose: Group countries by similar features
 
 features = ["GDP_per_capita", "Schooling", "Alcohol_consumption", "Incidents_HIV", "Life_expectancy"]
 X = df[features].dropna()
@@ -214,8 +240,11 @@ plt.show()
 
 # Finding:
 #   - Countries cluster into meaningful groups
+#   -> Clustering becomes a model itself
 
 # ------------------ Feature Change Over Time ------------------
+#Purpose: Understand which features changed the most
+
 feature_changes = []
 
 for col in ["Alcohol_consumption", "BMI", "Schooling"]:
@@ -230,8 +259,10 @@ for name, mean_change in feature_changes:
 
 # Finding:
 #   - Some features shows improvements over time
+#   - Helps assess whether development trends are improving.
 
 # ------------------ Redundant or Low-Variance Features ------------------
+# Same as the Correlationmatrix: Find out which features you can drop and which don't
 
 sns.scatterplot(data=df, x="Infant_deaths", y="Under_five_deaths")
 plt.title("Infant Deaths vs Under-5 Deaths")
@@ -252,6 +283,7 @@ for col in df.columns:
 
 # ------------------ Additional Visual Insights ------------------
 
+
 # KDE Plot: GDP vs Life Expectancy
 sns.jointplot(data=df, x="GDP_per_capita", y="Life_expectancy", kind="kde", fill=True)
 plt.suptitle("KDE Plot: GDP vs Life Expectancy", y=1.05)
@@ -266,7 +298,6 @@ plt.show()
 sns.jointplot(data=df, x="Schooling", y="Life_expectancy", kind="hist")
 plt.suptitle("Histogram: Schooling vs Life Expectancy", y=1.05)
 plt.show()
-
 
 
 # ============================================================

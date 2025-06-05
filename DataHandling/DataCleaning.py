@@ -2,7 +2,7 @@
 #                     DATA CLEANING
 # ============================================================
 
-# Goal: Prepare the dataset for analysis by handling missing values, duplicates, and data types.
+# Goal: Prepare the dataset for analysis by handling missing values, duplicates, and data types... just like in the Data Handeling Exercise
 
 # ------------------ Imports ------------------
 import pandas as pd
@@ -114,9 +114,11 @@ output_path = r"Data_Cleaned.xlsx"
 print(f"Daten wurden erfolgreich gespeichert unter: {output_path}")
 
 # ------------------ Class Distribution: Region ------------------
+# Goal: Understand the distribution of the target variable 'Region' to assess class imbalance.
 
 print("Class Distribution of the Target Variable 'Region'")
 
+#Plot which counts entries
 plt.figure(figsize=(10, 6))
 sns.countplot(data=df, x="Region", order=df["Region"].value_counts().index, palette="viridis")
 plt.title("Distribution of Countries by Region", fontsize=14)
@@ -129,6 +131,11 @@ plt.show()
 region_counts = df["Region"].value_counts()
 print("\nRegion Distribution (Number of Rows):")
 print(region_counts)
+
+#Finding:
+#   - Shows a high number of records from Africa
+#   - Shows a very low number of records für North America
+#   -> class imbalance
 
 # ------------------ Final Conclusion ------------------
 # The dataset has been successfully cleaned:
