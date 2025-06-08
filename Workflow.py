@@ -204,19 +204,27 @@ Overall, KNN offers good interpretability and decent performance, making it a us
 
 '''
 ========================================
-                Models
+                Deployment
 ========================================
 
-- Discuss model deployment from a technical point of view
-
 - Try to interpret your model from the domain expert view. Is the model good
-enough? What are possible consequences of deploying the model? What needs to
-be monitored after deployment?
+enough?  What needs to be monitored after deployment?
+
+    ->Presentation
 
 - Discuss model deployment from a societal point of view. What does it mean for
 society if such a model would be deployed at large scale? Are there any dangers?
 
+    ->It could help policymakers identify development needs or allocate resources more fairly by focusing on indicators rather than national identity.
+    However, there are also dangers: the model might reinforce existing biases, oversimplify complex social realities, or lead to decisions based solely on data without considering local context.
 
 '''
 
+'''
+========================================
+            Presentation
+========================================
+
+Also added in the upload.
+'''
 
